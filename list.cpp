@@ -12,14 +12,14 @@ namespace dl
             Node* head;
             Node* tail;
         };
-
+        
         Node* point{ new Node };
-
-        void setNode(int node)
+        
+        void setNode (int node)
         {
             while (point->head != nullptr)
                 point = point->head;
-
+                
             for (int i{}; i < node; i++)
             {
                 if (point->tail != nullptr)
@@ -30,28 +30,34 @@ namespace dl
                     break;
                 }
             }
-
+                
             return;
         }
-
+        
     public:
-        list(int nodes)
+        list (int nodes)
         {
             Node* link{ point };
             point->head = nullptr;
-
-            for (int i{}; i < nodes; i++)
+            
+            for (int i{}; i <= nodes -2; i++)
             {
                 point = new Node;
                 link->tail = point;
                 point->head = link;
                 link = link->tail;
             }
-
+            
             point->tail = nullptr;
             return;
         }
-
+        
+        list (const list& copy)
+        {
+            point = copy.point;
+            return;
+        }
+        
         ~list()
         {
             while (point->head != nullptr)
@@ -59,25 +65,25 @@ namespace dl
                 point = point->head;
                 delete point->tail;
             }
-
-            delete point;
+            
+            delete point;   
             return;
         }
-
-        void setData(int node, T data)
+        
+        void setData (int node, T data)
         {
             setNode(node);
             point->data = data;
             return;
         }
-
-        T grabData(int node)
+        
+        T grabData (int node)
         {
             setNode(node);
             return point->data;
         }
-
-        void print()
+        
+        void print ()
         {
             setNode(0);
             while (point->tail != nullptr)
@@ -85,11 +91,12 @@ namespace dl
                 std::cout << point->data << "\n";
                 point = point->tail;
             }
-
+            
+            std::cout << point->data << "\n";
             return;
         }
-
-        void print(int node)
+        
+        void print (int node)
         {
             setNode(node);
             std::cout << point->data;
@@ -108,10 +115,10 @@ int main()
     {
         list.setData(2, list.grabData(0) + list.grabData(1));
         list.print(0);
-
+        
         list.setData(0, list.grabData(1));
         list.setData(1, list.grabData(2));
-
+        
         if (i < 9)
             std::cout << ", ";
     }
