@@ -54,7 +54,22 @@ namespace dl
         
         list (const list& copy)
         {
-            point = copy.point;
+            Node* temp = copy.point;
+            Node* link{ point };
+            
+            while (temp->head != nullptr)
+                temp = temp->head;
+                
+            while (temp->tail != nullptr)
+            {
+                point->data = temp->data;
+                point = new Node;
+                link->tail = point;
+                point->head = link;
+                temp = temp->tail;
+            }
+            
+            point->tail = nullptr;
             return;
         }
         
