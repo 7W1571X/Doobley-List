@@ -1,9 +1,9 @@
 #include <iostream>
 
-namespace dl
+namespace tds
 {
-    template <typename T>
-    class list
+    template<typename T, std::size_t Elements>
+    class dooblist
     {
     private:
         struct Node
@@ -13,130 +13,105 @@ namespace dl
             Node* tail;
         };
         
-        Node* point{ new Node };
+        Node* point;
         
-        void setNode (int node)
+    public:
+        dooblist()
+        {
+            if (Elements > 0)
+            {
+                point = new Node;
+                point->head = nullptr;
+                
+                Node* link{ point };
+                for (int i{}; i < Elements; i++)
+                {
+                    point = new Node;
+                    link->tail = point;
+                    point->head = link;
+                    link = link->tail;
+                }
+                
+                point->tail = nullptr;
+            }
+            else
+                point = nullptr;
+                
+            return;
+        }
+        
+        dooblist (const std::initializer_list<T>& init)
+        {
+            if (Elements > 0)
+            {
+                point = new Node;
+                point->head = nullptr;
+                
+                Node* link{ point };
+                for (int i{}; i < Elements; i++)
+                {
+                    point = new Node;
+                    link->tail = point;
+                    point->head = link;
+                    link = link->tail;
+                }
+                
+                point->tail = nullptr;
+                
+                while (point->head != nullptr)
+                    point = point->head;
+                    
+                for (auto data : init)
+                {
+                    point->data = data;
+                    point = point->tail;
+                }
+            }
+            else
+                point = nullptr;
+                
+            return;
+        }
+        
+        int size()
+        {
+            int nodes{};
+            while (point->head != nullptr)
+                point = point->head;
+                
+            while (point->tail != nullptr)
+            {
+                point = point->tail;
+                nodes++;
+            }
+            
+            return nodes;
+        }
+        
+        T& operator[] (const int& node)
         {
             while (point->head != nullptr)
                 point = point->head;
                 
             for (int i{}; i < node; i++)
-            {
-                if (point->tail != nullptr)
-                    point = point->tail;
-                else
-                {
-                    std::cout << "ERROR: Cannot exceed list limit.\n";
-                    break;
-                }
-            }
+                point = point->tail;
                 
-            return;
-        }
-        
-    public:
-        list (int nodes)
-        {
-            Node* link{ point };
-            point->head = nullptr;
-            
-            for (int i{}; i <= nodes -2; i++)
-            {
-                point = new Node;
-                link->tail = point;
-                point->head = link;
-                link = link->tail;
-            }
-            
-            point->tail = nullptr;
-            return;
-        }
-        
-        list (const list& copy)
-        {
-            Node* temp = copy.point;
-            Node* link{ point };
-            
-            while (temp->head != nullptr)
-                temp = temp->head;
-                
-            while (temp->tail != nullptr)
-            {
-                point->data = temp->data;
-                point = new Node;
-                link->tail = point;
-                point->head = link;
-                temp = temp->tail;
-            }
-            
-            point->tail = nullptr;
-            return;
-        }
-        
-        ~list()
-        {
-            while (point->head != nullptr)
-            {
-                point = point->head;
-                delete point->tail;
-            }
-            
-            delete point;   
-            return;
-        }
-        
-        void setData (int node, T data)
-        {
-            setNode(node);
-            point->data = data;
-            return;
-        }
-        
-        T grabData (int node)
-        {
-            setNode(node);
             return point->data;
         }
         
-        void print ()
+        ~dooblist()
         {
-            setNode(0);
-            while (point->tail != nullptr)
-            {
-                std::cout << point->data << "\n";
+            while (point != nullptr)
                 point = point->tail;
+                
+            while (point != nullptr)
+            {
+                point = point->tail;
+                delete point->head;
             }
             
-            std::cout << point->data << "\n";
-            return;
-        }
-        
-        void print (int node)
-        {
-            setNode(node);
-            std::cout << point->data;
+            delete point;
             return;
         }
     };
-}
-
-int main()
-{
-    dl::list<int> list{ 3 };
-    list.setData(0, 0);
-    list.setData(1, 1);
-
-    for (int i{}; i < 10; i++)
-    {
-        list.setData(2, list.grabData(0) + list.grabData(1));
-        list.print(0);
-        
-        list.setData(0, list.grabData(1));
-        list.setData(1, list.grabData(2));
-        
-        if (i < 9)
-            std::cout << ", ";
-    }
-
-    return 0;
 }
