@@ -115,3 +115,27 @@ namespace tds
         }
     };
 }
+
+int main() // Quick Test
+{
+    tds::dooblist<int, 3> fib{ 0, 1 };
+    for (int i{}; i < 10; i++)
+    {
+        fib[2] = fib[0] + fib[1];
+        std::cout << fib[0];
+        
+        fib[0] = fib[1];
+        fib[1] = fib[2];
+        
+        if (i != 9)
+            std::cout << ", ";
+    }
+    
+    std::cout << std::endl;
+    tds::dooblist<int, 3> foo{ fib };
+    
+    for (int i{}; i < foo.size(); i++)
+        std::cout << foo[i] << ", ";
+    
+    return 0;
+}
