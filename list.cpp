@@ -16,16 +16,14 @@ namespace tds
         Node* point;
         
     public:
-        dooblist()
+        dooblist (void) // EX: tds::dooblist<int, 1> fib;
         {
-            if (Elements > 0)
-            {
+            if (Elements > 0) {
                 point = new Node;
                 point->head = nullptr;
                 
                 Node* link{ point };
-                for (int i{}; i < Elements; i++)
-                {
+                for (int i{}; i < Elements; i++) {
                     point = new Node;
                     link->tail = point;
                     point->head = link;
@@ -40,16 +38,14 @@ namespace tds
             return;
         }
         
-        dooblist (const std::initializer_list<T>& init)
+        dooblist (const std::initializer_list<T>& init) // tds::dooblist<int, 1> fib{ 1 };
         {
-            if (Elements > 0)
-            {
+            if (Elements > 0) {
                 point = new Node;
                 point->head = nullptr;
                 
                 Node* link{ point };
-                for (int i{}; i < Elements; i++)
-                {
+                for (int i{}; i < Elements; i++) {
                     point = new Node;
                     link->tail = point;
                     point->head = link;
@@ -61,8 +57,7 @@ namespace tds
                 while (point->head != nullptr)
                     point = point->head;
                     
-                for (auto data : init)
-                {
+                for (auto data : init) {
                     point->data = data;
                     point = point->tail;
                 }
@@ -73,22 +68,7 @@ namespace tds
             return;
         }
         
-        int size()
-        {
-            int nodes{};
-            while (point->head != nullptr)
-                point = point->head;
-                
-            while (point->tail != nullptr)
-            {
-                point = point->tail;
-                nodes++;
-            }
-            
-            return nodes;
-        }
-        
-        T& operator[] (const int& node)
+        T& operator[] (const int& node) // Allows for use of grabbing and setting values using []
         {
             while (point->head != nullptr)
                 point = point->head;
@@ -99,13 +79,26 @@ namespace tds
             return point->data;
         }
         
-        ~dooblist()
+        int size (void) // Returns size of list, EX: list.size() - has value of int
+        {
+            int nodes{};
+            while (point->head != nullptr)
+                point = point->head;
+                
+            while (point->tail != nullptr) {
+                point = point->tail;
+                nodes++;
+            }
+            
+            return nodes;
+        }
+        
+        ~dooblist() // Deconstructs list when finished
         {
             while (point != nullptr)
                 point = point->tail;
                 
-            while (point != nullptr)
-            {
+            while (point != nullptr) {
                 point = point->tail;
                 delete point->head;
             }
@@ -119,8 +112,7 @@ namespace tds
 int main() // Quick Test
 {
     tds::dooblist<int, 3> fib{ 0, 1 };
-    for (int i{}; i < 10; i++)
-    {
+    for (int i{}; i < 10; i++) {
         fib[2] = fib[0] + fib[1];
         std::cout << fib[0];
         
